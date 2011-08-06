@@ -12,13 +12,3 @@ void *operator new(unsigned int x) {
 void operator delete(void *pointer) {
 	capi_free(pointer);
 }
-
-int cpp_init() {
-	a = new A();
-
-	return(0);
-}
-
-void cpp_exit() {
-	delete a;
-}

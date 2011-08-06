@@ -10,3 +10,15 @@ public:
 		capi_printk("inside destructor!\n");
 	}
 };
+
+static Driver* driver;
+
+int cpp_init() {
+	driver = new Driver();
+
+	return(0);
+}
+
+void cpp_exit() {
+	delete driver;
+}

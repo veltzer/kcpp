@@ -3,7 +3,8 @@
 ##############
 
 # fill in the object files which are part of the module
-obj-m:=top.o mem.o
+obj-m:=top.o
+top-objs:=top.o mem.o
 # fill in any extra compiler flags
 EXTRA_CFLAGS+=-Werror -I.
 # fill in the name of the module
@@ -20,13 +21,25 @@ V?=0
 ##############
 # code start #
 ##############
+ifeq ($(V),1)
+Q=
+# we are not silent in this branch
+else # DO_MKDBG
+Q=@
+#.SILENT:
+endif # DO_MKDBG
 
-CC_SOURCES:=$(shell find . -name "*.cc")
+SOURCES_ALL:=$(shell git ls-files)
+CC_SOURCES:=$(filter %.cc,$(SOURCES_ALL))
+#CC_SOURCES:=$(shell find . -name "*.cc")
 CC_OBJECTS:=$(addsuffix .o,$(basename $(CC_SOURCES)))
+#C_SOURCES:=$(shell find . -name "*.c")
+C_SOURCES:=$(filter %.c,$(SOURCES_ALL))
+C_OBJECTS:=$(addsuffix .o,$(basename $(C_SOURCES)))
 
 # this rule was also taken from running with V=1
 $(ko-m): top.o top.mod.o $(CC_OBJECTS) 
-	@ld -r -m elf_i386 --build-id -o $(ko-m) top.o top.mod.o $(CC_OBJECTS)
+	$(Q)ld -r -m elf_i386 --build-id -o $(ko-m) top.o top.mod.o $(CC_OBJECTS)
 # how was this monstrosity created?
 # I ran the build with V=1 and registered the command to compile via gcc.
 # picked the same version g++ and gave it the entire flag set (especially the -f stuff).
@@ -35,61 +48,67 @@ $(ko-m): top.o top.mod.o $(CC_OBJECTS)
 # -Werror-implicit-function-declaration -Wstrict-prototypes
 # which are not relevant to C++ (the compiler told me so!)
 %.o: %.cc
-	@g++ -nostdinc -Wall -Wundef -Wno-trigraphs -fno-strict-aliasing -fno-common -Os -fno-stack-protector -m32 -msoft-float -mregparm=3 -freg-struct-return -mpreferred-stack-boundary=2 -march=i686 -pipe -Wno-sign-compare -fno-asynchronous-unwind-tables -mno-sse -mno-mmx -mno-sse2 -mno-3dnow -fomit-frame-pointer -Werror -c -o $@ $<
+	$(Q)g++ -nostdinc -Wall -Wundef -Wno-trigraphs -fno-strict-aliasing -fno-common -Os -fno-stack-protector -m32 -msoft-float -mregparm=3 -freg-struct-return -mpreferred-stack-boundary=2 -march=i686 -pipe -Wno-sign-compare -fno-asynchronous-unwind-tables -mno-sse -mno-mmx -mno-sse2 -mno-3dnow -fomit-frame-pointer -Werror -c -o $@ $<
 top.o top.mod.o: top.c
-	@$(MAKE) -C $(KDIR) M=$(PWD) V=$(V) modules
-	-@rm -f top.ko
+	$(Q)$(MAKE) -C $(KDIR) M=$(PWD) V=$(V) modules
+	$(Q)-rm -f top.ko
 .PHONY: modules
 modules:
-	@$(MAKE) -C $(KDIR) M=$(PWD) V=$(V) modules
+	$(Q)$(MAKE) -C $(KDIR) M=$(PWD) V=$(V) modules
 .PHONY: modules_install
 modules_install:
-	@$(MAKE) -C $(KDIR) M=$(PWD) V=$(V) modules_install
+	$(Q)$(MAKE) -C $(KDIR) M=$(PWD) V=$(V) modules_install
 .PHONY: clean
 clean:
-	@$(MAKE) -C $(KDIR) M=$(PWD) V=$(V) clean
+	$(Q)$(MAKE) -C $(KDIR) M=$(PWD) V=$(V) clean
 .PHONY: help
 help:
-	@$(MAKE) -C $(KDIR) M=$(PWD) V=$(V) help
+	$(Q)$(MAKE) -C $(KDIR) M=$(PWD) V=$(V) help
 .PHONY: insmod
 insmod:
-	@sudo insmod $(ko-m) 
+	$(Q)sudo insmod $(ko-m) 
 .PHONY: lsmod
 lsmod:
-	@sudo lsmod | grep $(name)
+	$(Q)sudo lsmod | grep $(name)
 .PHONY: rmmod
 rmmod:
-	@sudo rmmod $(name)
+	$(Q)sudo rmmod $(name)
 .PHONY: last
 last:
-	@sudo tail /var/log/kern.log
+	$(Q)sudo tail /var/log/kern.log
 .PHONY: log
 log:
-	@sudo tail -f /var/log/kern.log
+	$(Q)sudo tail -f /var/log/kern.log
+.PHONY: cleanlog
+cleanlog:
+	$(Q)sudo dmesg -c > /dev/null
 .PHONY: halt
 halt:
-	@sudo halt
+	$(Q)sudo halt
 .PHONY: reboot
 reboot:
-	@sudo reboot
+	$(Q)sudo reboot
 .PHONY: tips
 tips:
-	@echo "do make V=1 [target] to see more of what is going on"
-	@echo
-	@echo "in order for the operational targets to work you need to"
-	@echo "make sure that can do 'sudo', preferably with no password."
-	@echo "one way to do that is to add yourself to the 'sudo' group"
-	@echo "and add to the /etc/sudoers file, using visudo, the line:"
-	@echo "%sudo ALL=NOPASSWD: ALL"
-	@echo
-	@echo "you can compile your module to a different kernel version"
-	@echo "like this: make KVER=2.6.13 [target]"
-	@echo "or edit the file and permanently change the version"
+	$(Q)echo "do make V=1 [target] to see more of what is going on"
+	$(Q)echo
+	$(Q)echo "in order for the operational targets to work you need to"
+	$(Q)echo "make sure that can do 'sudo', preferably with no password."
+	$(Q)echo "one way to do that is to add yourself to the 'sudo' group"
+	$(Q)echo "and add to the /etc/sudoers file, using visudo, the line:"
+	$(Q)echo "%sudo ALL=NOPASSWD: ALL"
+	$(Q)echo
+	$(Q)echo "you can compile your module to a different kernel version"
+	$(Q)echo "like this: make KVER=2.6.13 [target]"
+	$(Q)echo "or edit the file and permanently change the version"
 .PHONY: debug
 debug:
 	$(info V is $(V))
 	$(info PWD is $(PWD))
 	$(info KVER is $(KVER))
 	$(info KDIR is $(KDIR))
+	$(info SOURCES_ALL is $(SOURCES_ALL))
 	$(info CC_SOURCES is $(CC_SOURCES))
 	$(info CC_OBJECTS is $(CC_OBJECTS))
+	$(info C_SOURCES is $(C_SOURCES))
+	$(info C_OBJECTS is $(C_OBJECTS))
