@@ -1,0 +1,3 @@
+- who am I
+- how to choose the compiler
+- how to set the flags
