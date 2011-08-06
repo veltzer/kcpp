@@ -13,6 +13,10 @@ public:
 
 static Driver* driver;
 
+extern "C" {
+	int cpp_init(void);
+	void cpp_exit(void);
+}
 int cpp_init() {
 	driver = new Driver();
 

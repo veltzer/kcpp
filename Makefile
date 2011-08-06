@@ -4,19 +4,19 @@
 
 # fill in the object files which are part of the module
 obj-m:=top.o
-top-objs:=top.o mem.o
+top-objs:=top.o ser_mem.o ser_print.o
 # fill in any extra compiler flags
 EXTRA_CFLAGS+=-Werror -I.
 # fill in the name of the module
 name:=top
 # fill in the name of the genrated ko file
-ko-m=top.ko
+ko-m:=top.ko
 # fill in the version of the kernel for which you want the module compiled to
 KVER?=$(shell uname -r)
 # fill in the directory of the kernel build system
 KDIR:=/lib/modules/$(KVER)/build
 # fill in the vervosity level you want
-V?=0
+V?=1
 
 ##############
 # code start #
@@ -36,6 +36,7 @@ CC_OBJECTS:=$(addsuffix .o,$(basename $(CC_SOURCES)))
 #C_SOURCES:=$(shell find . -name "*.c")
 C_SOURCES:=$(filter %.c,$(SOURCES_ALL))
 C_OBJECTS:=$(addsuffix .o,$(basename $(C_SOURCES)))
+#top-objs:=$(C_OBJECTS)
 
 # this rule was also taken from running with V=1
 $(ko-m): top.o top.mod.o $(CC_OBJECTS) 
@@ -51,6 +52,7 @@ $(ko-m): top.o top.mod.o $(CC_OBJECTS)
 	$(Q)g++ -nostdinc -Wall -Wundef -Wno-trigraphs -fno-strict-aliasing -fno-common -Os -fno-stack-protector -m32 -msoft-float -mregparm=3 -freg-struct-return -mpreferred-stack-boundary=2 -march=i686 -pipe -Wno-sign-compare -fno-asynchronous-unwind-tables -mno-sse -mno-mmx -mno-sse2 -mno-3dnow -fomit-frame-pointer -Werror -c -o $@ $<
 top.o top.mod.o: top.c
 	$(Q)$(MAKE) -C $(KDIR) M=$(PWD) V=$(V) modules
+	#$(Q)cp top.ko keep.ko
 	$(Q)-rm -f top.ko
 .PHONY: modules
 modules:
@@ -73,6 +75,9 @@ lsmod:
 .PHONY: rmmod
 rmmod:
 	$(Q)sudo rmmod $(name)
+.PHONY: modinfo
+modinfo:
+	$(Q)sudo modinfo $(ko-m)
 .PHONY: last
 last:
 	$(Q)sudo tail /var/log/kern.log
