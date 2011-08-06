@@ -3,7 +3,7 @@
 ##############
 
 # fill in the object files which are part of the module
-obj-m:=top.o
+obj-m:=top.o mem.o
 # fill in any extra compiler flags
 EXTRA_CFLAGS+=-Werror -I.
 # fill in the name of the module

@@ -1,1 +1,2 @@
 - make my own rules in the Makefile heed the same V variable for siletness
+- add my own collection of init hooks.
