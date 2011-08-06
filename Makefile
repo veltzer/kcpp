@@ -3,20 +3,20 @@
 ##############
 
 # fill in the object files which are part of the module
-obj-m:=top.o
-top-objs:=top.o ser_mem.o ser_print.o
+obj-m:=kcpp.o
+kcpp-objs:=top.o ser_mem.o ser_print.o
 # fill in any extra compiler flags
 EXTRA_CFLAGS+=-Werror -I.
 # fill in the name of the module
-name:=top
+name:=kcpp
 # fill in the name of the genrated ko file
-ko-m:=top.ko
+ko-m:=$(name).ko
 # fill in the version of the kernel for which you want the module compiled to
 KVER?=$(shell uname -r)
 # fill in the directory of the kernel build system
 KDIR:=/lib/modules/$(KVER)/build
 # fill in the vervosity level you want
-V?=1
+V?=0
 
 ##############
 # code start #
@@ -29,7 +29,8 @@ Q=@
 #.SILENT:
 endif # DO_MKDBG
 
-SOURCES_ALL:=$(shell git ls-files)
+#SOURCES_ALL:=$(shell git ls-files)
+SOURCES_ALL:=$(filter-out %.mod.c,$(shell find . -name "*.cc" -or -name "*.c"))
 CC_SOURCES:=$(filter %.cc,$(SOURCES_ALL))
 #CC_SOURCES:=$(shell find . -name "*.cc")
 CC_OBJECTS:=$(addsuffix .o,$(basename $(CC_SOURCES)))
@@ -40,7 +41,7 @@ C_OBJECTS:=$(addsuffix .o,$(basename $(C_SOURCES)))
 
 # this rule was also taken from running with V=1
 $(ko-m): top.o top.mod.o $(CC_OBJECTS) 
-	$(Q)ld -r -m elf_i386 --build-id -o $(ko-m) top.o top.mod.o $(CC_OBJECTS)
+	$(Q)ld -r -m elf_i386 --build-id -o $(ko-m) $(C_OBJECTS) kcpp.mod.o $(CC_OBJECTS)
 # how was this monstrosity created?
 # I ran the build with V=1 and registered the command to compile via gcc.
 # picked the same version g++ and gave it the entire flag set (especially the -f stuff).
