@@ -19,21 +19,21 @@
 /*
 	Module name function
 */
-const char* capi_modname(void) {
+const char* service_modname(void) {
 	return myname;
 }
 
 /*
 	Throw a bug
 */
-void capi_bug(void) {
+void service_bug(void) {
 	BUG();
 }
 
 /*
 	A printing function. This function supports var args. 
 */
-int capi_printk(const char* fmt,...) {
+int service_printk(const char* fmt,...) {
 	va_list args;
 	int ret;
 	va_start(args,fmt);
@@ -44,21 +44,21 @@ int capi_printk(const char* fmt,...) {
 /*
 	A var arg printk version
 */
-int capi_vprintk(const char* fmt,va_list list) {
+int service_vprintk(const char* fmt,va_list list) {
 	return vprintk(fmt, list);
 }
 
 /*
 	A simple string printing function
 */
-int capi_puts(const char* str) {
+int service_puts(const char* str) {
 	return printk("%s",str);
 }
 
 /*
 	A stack trace service
 */
-void capi_stacktrace(void) {
+void service_stacktrace(void) {
 /*
 	#ifdef CONFIG_STACKTRACE
 	struct stack_trace my_trace;

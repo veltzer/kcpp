@@ -26,33 +26,33 @@
 /*
 	Get the page size for the operating system currently running...
 */
-unsigned int capi_get_page_size(void) {
+unsigned int service_get_page_size(void) {
 	return PAGE_SIZE;
 }
 /*
 	Translate a virtual address to a physical one
 */
-unsigned long capi_virt_to_phys(void* virt) {
+unsigned long service_virt_to_phys(void* virt) {
 	// TODO: should we add error checking here ?!?
 	return virt_to_phys(virt);
 }
 /*
 	put 0 in an area of memory...
 */
-void capi_zeromem(void* addr,unsigned int size) {
+void service_zeromem(void* addr,unsigned int size) {
 	//TODO: is there a faster way to do it?
 	memset(addr,0,size);
 }
 /*
 	put a certain number in an area of memory
 */
-void capi_memset(void* addr,int c,unsigned int size) {
+void service_memset(void* addr,int c,unsigned int size) {
 	memset(addr,c,size);
 }
 /*
 	Memory copy API
 */
-void capi_memcpy(const void* to,const void* from,unsigned int size) {
+void service_memcpy(const void* to,const void* from,unsigned int size) {
 	memcpy((void*)to,from,size);
 }
 #ifdef DO_MEMDBG
@@ -62,7 +62,7 @@ static unsigned int free_num=0;
 /*
 	Memory allocation API
 */
-void* capi_malloc(unsigned int size) {
+void* service_malloc(unsigned int size) {
 	void* p;
 	DEBUG("start");
 #ifdef DO_MEMDBG
@@ -83,7 +83,7 @@ void* capi_malloc(unsigned int size) {
 /*
 	Memory relase API
 */
-void capi_free(void* pointer) {
+void service_free(void* pointer) {
 	DEBUG("start");
 	DEBUG("kfree pointer=%p",pointer);
 #ifdef DO_MEMDBG
@@ -91,7 +91,7 @@ void capi_free(void* pointer) {
 #endif // DO_MEMDBG
 	kfree(pointer);
 }
-void capi_mdebug(void) {
+void service_mdebug(void) {
 #ifdef DO_MEMDBG
 	DEBUG("malloc_num is %u",malloc_num);
 	DEBUG("free_num is %u",free_num);
