@@ -25,3 +25,9 @@ future idea:
 	work with...
 	This is to be developed as a patch to the linux kernel (big project - watch out!
 	may never happen...)
+
+Related projects:
+http://code.google.com/p/kernelcpp/
+	They do not have a buffer layer but instead do "extern C" before kernel headers.
+	Try to see if this works for a big example.
+	They have all kinds of other ideas about constructors for global object and so on.
