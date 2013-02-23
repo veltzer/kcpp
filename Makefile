@@ -40,7 +40,7 @@ C_OBJECTS:=$(addsuffix .o,$(basename $(C_SOURCES)))
 #top-objs:=$(C_OBJECTS)
 
 # this rule was also taken from running with V=1
-$(ko-m): top.o top.mod.o $(CC_OBJECTS) 
+$(ko-m): top.o top.mod.o $(CC_OBJECTS) checkpatch
 	$(Q)ld -r -m elf_i386 --build-id -o $(ko-m) $(C_OBJECTS) kcpp.mod.o $(CC_OBJECTS)
 # how was this monstrosity created?
 # I ran the build with V=1 and registered the command to compile via gcc.
@@ -119,6 +119,7 @@ debug:
 	$(info C_OBJECTS is $(C_OBJECTS))
 .PHONY: checkpatch
 checkpatch:
-	$(Q)~/install/linux-3.6.3/scripts/checkpatch.pl --file top.c --root ~/install/linux-3.6.3
-	$(Q)~/install/linux-3.6.3/scripts/checkpatch.pl --file ser_mem.c --root ~/install/linux-3.6.3
-	$(Q)~/install/linux-3.6.3/scripts/checkpatch.pl --file ser_print.c --root ~/install/linux-3.6.3
+	$(info doing [$@])
+	$(Q)scripts/wrapper.py ~/install/linux-3.6.3/scripts/checkpatch.pl --file top.c --root ~/install/linux-3.6.3
+	$(Q)scripts/wrapper.py ~/install/linux-3.6.3/scripts/checkpatch.pl --file ser_mem.c --root ~/install/linux-3.6.3
+	$(Q)scripts/wrapper.py ~/install/linux-3.6.3/scripts/checkpatch.pl --file ser_print.c --root ~/install/linux-3.6.3
