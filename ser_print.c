@@ -19,46 +19,52 @@
 /*
 	Module name function
 */
-const char* service_modname(void) {
+const char *service_modname(void)
+{
 	return myname;
 }
 
 /*
 	Throw a bug
 */
-void service_bug(void) {
+void service_bug(void)
+{
 	BUG();
 }
 
 /*
-	A printing function. This function supports var args. 
+	A printing function. This function supports var args.
 */
-int service_printk(const char* fmt,...) {
+int service_printk(const char *fmt, ...)
+{
 	va_list args;
 	int ret;
-	va_start(args,fmt);
-	ret=vprintk(fmt, args);
+	va_start(args, fmt);
+	ret = vprintk(fmt, args);
 	va_end(args);
 	return ret;
 }
 /*
 	A var arg printk version
 */
-int service_vprintk(const char* fmt,va_list list) {
+int service_vprintk(const char *fmt, va_list list)
+{
 	return vprintk(fmt, list);
 }
 
 /*
 	A simple string printing function
 */
-int service_puts(const char* str) {
-	return printk("%s",str);
+int service_puts(const char *str)
+{
+	return pr_info("%s", str);
 }
 
 /*
 	A stack trace service
 */
-void service_stacktrace(void) {
+void service_stacktrace(void)
+{
 /*
 	#ifdef CONFIG_STACKTRACE
 	struct stack_trace my_trace;

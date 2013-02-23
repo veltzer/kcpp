@@ -16,8 +16,9 @@
 #include "services.h"
 #include "kernel_helper.h"
 
-// do you want memory debuggin ? (collecting number of allocations and deallocations...).
-//#define DO_MEMDBG
+/* do you want memory debuggin ? (collecting number of allocations
+ * and deallocations...). */
+/* #define DO_MEMDBG */
 
 /*
 	memory handling code
@@ -26,74 +27,84 @@
 /*
 	Get the page size for the operating system currently running...
 */
-unsigned int service_get_page_size(void) {
+unsigned int service_get_page_size(void)
+{
 	return PAGE_SIZE;
 }
 /*
 	Translate a virtual address to a physical one
 */
-unsigned long service_virt_to_phys(void* virt) {
-	// TODO: should we add error checking here ?!?
+unsigned long service_virt_to_phys(void *virt)
+{
+	/* TODO: should we add error checking here ?!? */
 	return virt_to_phys(virt);
 }
 /*
 	put 0 in an area of memory...
 */
-void service_zeromem(void* addr,unsigned int size) {
-	//TODO: is there a faster way to do it?
-	memset(addr,0,size);
+void service_zeromem(void *addr, unsigned int size)
+{
+	/* TODO: is there a faster way to do it? */
+	memset(addr, 0, size);
 }
 /*
 	put a certain number in an area of memory
 */
-void service_memset(void* addr,int c,unsigned int size) {
-	memset(addr,c,size);
+void service_memset(void *addr, int c, unsigned int size)
+{
+	memset(addr, c, size);
 }
 /*
 	Memory copy API
 */
-void service_memcpy(const void* to,const void* from,unsigned int size) {
-	memcpy((void*)to,from,size);
+void service_memcpy(const void *to, const void *from, unsigned int size)
+{
+	memcpy((void *)to, from, size);
 }
 #ifdef DO_MEMDBG
-static unsigned int malloc_num=0;
-static unsigned int free_num=0;
-#endif // DO_MEMDBG
+/* These are initialised to 0 by default... */
+static unsigned int malloc_num;
+static unsigned int free_num;
+#endif /* DO_MEMDBG */
 /*
 	Memory allocation API
 */
-void* service_malloc(unsigned int size) {
-	void* p;
+void *service_malloc(unsigned int size)
+{
+	void *p;
 	DEBUG("start");
 #ifdef DO_MEMDBG
 	malloc_num++;
-#endif // DO_MEMDBG
-	//if(size==0) {
-	//	DEBUG("kmalloc size=0");
-	//	BUG();
-	//}
-	//p=kmalloc(size,GFP_KERNEL);
-	p=kmalloc(size,GFP_KERNEL);
-	DEBUG("kmalloc size=%d pointer=%p",size,p);
-	if(p==NULL) {
-		ERROR("unable to allocate memory");
+#endif /* DO_MEMDBG */
+	/*
+	if (size == 0) {
+		DEBUG("kmalloc size=0");
+		BUG();
 	}
+	p = kmalloc(size, GFP_KERNEL);
+	*/
+	p = kmalloc(size, GFP_KERNEL);
+	DEBUG("kmalloc size=%d pointer=%p", size, p);
+	if (p == NULL)
+		ERROR("unable to allocate memory");
 	return p;
 }
 /*
 	Memory relase API
 */
-void service_free(void* pointer) {
+void service_free(void *pointer)
+{
 	DEBUG("start");
-	DEBUG("kfree pointer=%p",pointer);
+	DEBUG("kfree pointer=%p", pointer);
 #ifdef DO_MEMDBG
 	free_num++;
-#endif // DO_MEMDBG
+#endif /* DO_MEMDBG */
 	kfree(pointer);
 }
-void service_mdebug(void) {
+void service_mdebug(void)
+{
 #ifdef DO_MEMDBG
-	DEBUG("malloc_num is %u",malloc_num);
-	DEBUG("free_num is %u",free_num);
-#endif // DO_MEMDBG
+	DEBUG("malloc_num is %u", malloc_num);
+	DEBUG("free_num is %u", free_num);
+#endif /* DO_MEMDBG */
 }

@@ -52,20 +52,20 @@ $(ko-m): top.o top.mod.o $(CC_OBJECTS)
 %.o: %.cc
 	$(Q)g++ -nostdinc -Wall -Wundef -Wno-trigraphs -fno-strict-aliasing -fno-common -Os -fno-stack-protector -m32 -msoft-float -mregparm=3 -freg-struct-return -mpreferred-stack-boundary=2 -march=i686 -pipe -Wno-sign-compare -fno-asynchronous-unwind-tables -mno-sse -mno-mmx -mno-sse2 -mno-3dnow -fomit-frame-pointer -Werror -c -o $@ $<
 top.o top.mod.o: top.c
-	$(Q)$(MAKE) -C $(KDIR) M=$(PWD) V=$(V) modules
+	$(Q)$(MAKE) -C $(KDIR) M=$(CURDIR) V=$(V) modules
 	$(Q)-rm -f top.ko
 .PHONY: modules
 modules:
-	$(Q)$(MAKE) -C $(KDIR) M=$(PWD) V=$(V) modules
+	$(Q)$(MAKE) -C $(KDIR) M=$(CURDIR) V=$(V) modules
 .PHONY: modules_install
 modules_install:
-	$(Q)$(MAKE) -C $(KDIR) M=$(PWD) V=$(V) modules_install
+	$(Q)$(MAKE) -C $(KDIR) M=$(CURDIR) V=$(V) modules_install
 .PHONY: clean
 clean:
-	$(Q)$(MAKE) -C $(KDIR) M=$(PWD) V=$(V) clean
+	$(Q)$(MAKE) -C $(KDIR) M=$(CURDIR) V=$(V) clean
 .PHONY: help
 help:
-	$(Q)$(MAKE) -C $(KDIR) M=$(PWD) V=$(V) help
+	$(Q)$(MAKE) -C $(KDIR) M=$(CURDIR) V=$(V) help
 .PHONY: insmod
 insmod:
 	$(Q)sudo insmod $(ko-m) 
@@ -109,7 +109,7 @@ tips:
 .PHONY: debug
 debug:
 	$(info V is $(V))
-	$(info PWD is $(PWD))
+	$(info CURDIR is $(CURDIR))
 	$(info KVER is $(KVER))
 	$(info KDIR is $(KDIR))
 	$(info SOURCES_ALL is $(SOURCES_ALL))
@@ -117,3 +117,8 @@ debug:
 	$(info CC_OBJECTS is $(CC_OBJECTS))
 	$(info C_SOURCES is $(C_SOURCES))
 	$(info C_OBJECTS is $(C_OBJECTS))
+.PHONY: checkpatch
+checkpatch:
+	$(Q)~/install/linux-3.6.3/scripts/checkpatch.pl --file top.c --root ~/install/linux-3.6.3
+	$(Q)~/install/linux-3.6.3/scripts/checkpatch.pl --file ser_mem.c --root ~/install/linux-3.6.3
+	$(Q)~/install/linux-3.6.3/scripts/checkpatch.pl --file ser_print.c --root ~/install/linux-3.6.3
