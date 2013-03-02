@@ -22,7 +22,7 @@ not include the kernel headers and are C++ friendly. In the top part write a fra
 device driver writing based on OO concepts (inherit from Device and implement the relevant
 methods).
 
-future ideas:
+Future ideas:
 -------------
 * Add ability to include header files directly in C++ code.
 Progress: have 'copy_headers' target in makefile
