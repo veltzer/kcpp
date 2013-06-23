@@ -2,13 +2,13 @@
 # parameters #
 ##############
 
-# fill in the object files which are part of the module
-obj-m:=kcpp.o
-kcpp-objs:=top.o ser_mem.o ser_print.o
-# fill in any extra compiler flags
-EXTRA_CFLAGS+=-Werror -I.
 # fill in the name of the module
 name:=kcpp
+# fill in the object files which are part of the module
+obj-m:=$(name).o
+$(name)-objs:=top.o ser_mem.o ser_print.o ser_empty.o
+# fill in any extra compiler flags
+EXTRA_CFLAGS+=-Werror -I.
 # fill in the name of the genrated ko file
 ko-m:=$(name).ko
 # fill in the version of the kernel for which you want the module compiled to
@@ -41,7 +41,8 @@ C_OBJECTS:=$(addsuffix .o,$(basename $(C_SOURCES)))
 
 # this rule was also taken from running with V=1
 $(ko-m): top.o top.mod.o $(CC_OBJECTS) checkpatch
-	$(Q)ld -r -m elf_i386 --build-id -o $(ko-m) $(C_OBJECTS) kcpp.mod.o $(CC_OBJECTS)
+	$(info doing [$@])
+	$(Q)ld -r -m elf_i386 --build-id -o $(ko-m) $(C_OBJECTS) $(name).mod.o $(CC_OBJECTS)
 # how was this monstrosity created?
 # I ran the build with V=1 and registered the command to compile via gcc.
 # picked the same version g++ and gave it the entire flag set (especially the -f stuff).
@@ -49,13 +50,17 @@ $(ko-m): top.o top.mod.o $(CC_OBJECTS) checkpatch
 # -ffreestanding -Wno-pointer-sign -Wdeclaration-after-statement
 # -Werror-implicit-function-declaration -Wstrict-prototypes
 # which are not relevant to C++ (the compiler told me so!)
+# trying to add -fno-exceptions
 %.o: %.cc
-	$(Q)g++ -nostdinc -Wall -Wundef -Wno-trigraphs -fno-strict-aliasing -fno-common -Os -fno-stack-protector -m32 -msoft-float -mregparm=3 -freg-struct-return -mpreferred-stack-boundary=2 -march=i686 -pipe -Wno-sign-compare -fno-asynchronous-unwind-tables -mno-sse -mno-mmx -mno-sse2 -mno-3dnow -fomit-frame-pointer -Werror -c -o $@ $<
+	$(info doing [$@])
+	$(Q)g++ -nostdinc -Wall -Wundef -Wno-trigraphs -fno-strict-aliasing -fno-common -fno-delete-null-pointer-checks -O2 -m32 -msoft-float -mregparm=3 -freg-struct-return -fno-pic -mpreferred-stack-boundary=2 -march=i686 -mtune=generic -maccumulate-outgoing-args -Wa,-mtune=generic32 -ffreestanding -fstack-protector -pipe -fno-asynchronous-unwind-tables -mno-sse -mno-mmx -mno-sse2 -mno-3dnow -mno-avx -fno-omit-frame-pointer -fno-optimize-sibling-calls -fno-strict-overflow -fconserve-stack -fno-exceptions -Werror -c -o $@ $<
 top.o top.mod.o: top.c
+	$(info doing [$@])
 	$(Q)$(MAKE) -C $(KDIR) M=$(CURDIR) V=$(V) modules
 	$(Q)-rm -f top.ko
 .PHONY: modules
 modules:
+	$(info doing [$@])
 	$(Q)$(MAKE) -C $(KDIR) M=$(CURDIR) V=$(V) modules
 .PHONY: modules_install
 modules_install:
@@ -65,36 +70,47 @@ clean:
 	$(Q)$(MAKE) -C $(KDIR) M=$(CURDIR) V=$(V) clean
 .PHONY: help
 help:
+	$(info doing [$@])
 	$(Q)$(MAKE) -C $(KDIR) M=$(CURDIR) V=$(V) help
 .PHONY: insmod
 insmod:
+	$(info doing [$@])
 	$(Q)sudo insmod $(ko-m) 
 .PHONY: lsmod
 lsmod:
+	$(info doing [$@])
 	$(Q)sudo lsmod | grep $(name)
 .PHONY: rmmod
 rmmod:
+	$(info doing [$@])
 	$(Q)sudo rmmod $(name)
 .PHONY: modinfo
 modinfo:
+	$(info doing [$@])
 	$(Q)sudo modinfo $(ko-m)
 .PHONY: last
 last:
+	$(info doing [$@])
 	$(Q)sudo tail /var/log/kern.log
 .PHONY: log
 log:
+	$(info doing [$@])
 	$(Q)sudo tail -f /var/log/kern.log
 .PHONY: cleanlog
 cleanlog:
+	$(info doing [$@])
 	$(Q)sudo dmesg -c > /dev/null
 .PHONY: halt
 halt:
+	$(info doing [$@])
 	$(Q)sudo halt
 .PHONY: reboot
 reboot:
+	$(info doing [$@])
 	$(Q)sudo reboot
 .PHONY: tips
 tips:
+	$(info doing [$@])
 	$(Q)echo "do make V=1 [target] to see more of what is going on"
 	$(Q)echo
 	$(Q)echo "in order for the operational targets to work you need to"
@@ -108,6 +124,9 @@ tips:
 	$(Q)echo "or edit the file and permanently change the version"
 .PHONY: debug
 debug:
+	$(info doing [$@])
+	$(info name is $(name))
+	$(info ko-m is $(ko-m))
 	$(info V is $(V))
 	$(info CURDIR is $(CURDIR))
 	$(info KVER is $(KVER))
@@ -123,3 +142,7 @@ checkpatch:
 	$(Q)scripts/wrapper.py ~/install/linux-3.6.3/scripts/checkpatch.pl --file top.c --root ~/install/linux-3.6.3
 	$(Q)scripts/wrapper.py ~/install/linux-3.6.3/scripts/checkpatch.pl --file ser_mem.c --root ~/install/linux-3.6.3
 	$(Q)scripts/wrapper.py ~/install/linux-3.6.3/scripts/checkpatch.pl --file ser_print.c --root ~/install/linux-3.6.3
+test_stress_insmod_rmmod: $(ko-m)
+	$(info doing [$@])
+	-sudo rmmod $(name)
+	./scripts/test_stress_insmod_rmmod.pl $(ko-m) 1000

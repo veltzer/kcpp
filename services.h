@@ -14,6 +14,9 @@ typedef void (*func_void_pvoid_pvoid_pvoid_pvoid)(void*,void*,void*,void*);
 extern "C" {
 #endif // __cplusplus
 
+// empty class
+void service_empty(void);
+
 // infrastructure calls
 void service_init(void);
 void service_finish(void);
