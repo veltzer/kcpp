@@ -63,6 +63,8 @@ KCPP_FLAGS_3447rt62:=-nostdinc -Wall -Wundef -Wno-trigraphs -fno-strict-aliasing
 #KCPP_FLAGS:=$(KCPP_FLAGS_380)
 KCPP_FLAGS:=$(KCPP_FLAGS_3447rt62)
 
+KCPP_FLAGS+=-fno-exceptions -fno-rtti -nostdinc++
+
 %.o: %.cc
 	$(info doing [$@])
 	$(Q)g++ $(KCPP_FLAGS) -c -o $@ $<
