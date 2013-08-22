@@ -57,9 +57,15 @@ $(ko-m): $(KO_DEPS)
 # -Werror-implicit-function-declaration -Wstrict-prototypes
 # which are not relevant to C++ (the compiler told me so!)
 # trying to add -fno-exceptions
+
+KCPP_FLAGS_380:=-nostdinc -Wall -Wundef -Wno-trigraphs -fno-strict-aliasing -fno-common -fno-delete-null-pointer-checks -O2 -m32 -msoft-float -mregparm=3 -freg-struct-return -fno-pic -mpreferred-stack-boundary=2 -march=i686 -mtune=generic -maccumulate-outgoing-args -Wa,-mtune=generic32 -ffreestanding -fstack-protector -pipe -fno-asynchronous-unwind-tables -mno-sse -mno-mmx -mno-sse2 -mno-3dnow -mno-avx -fno-omit-frame-pointer -fno-optimize-sibling-calls -fno-strict-overflow -fconserve-stack -fno-exceptions -Werror
+KCPP_FLAGS_3447rt62:=-nostdinc -Wall -Wundef -Wno-trigraphs -fno-strict-aliasing -fno-common -Werror-implicit-function-declaration -Wno-format-security -fno-delete-null-pointer-checks -O2 -m32 -msoft-float -mregparm=3 -freg-struct-return -mpreferred-stack-boundary=2 -march=i686 -mtune=generic -maccumulate-outgoing-args -Wa,-mtune=generic32 -ffreestanding -fstack-protector -pipe -Wno-sign-compare -fno-asynchronous-unwind-tables -mno-sse -mno-mmx -mno-sse2 -mno-3dnow -mno-avx -Wframe-larger-than=1024 -Wno-unused-but-set-variable -fno-omit-frame-pointer -fno-optimize-sibling-calls -fno-strict-overflow -fconserve-stack -Werror
+#KCPP_FLAGS:=$(KCPP_FLAGS_380)
+KCPP_FLAGS:=$(KCPP_FLAGS_3447rt62)
+
 %.o: %.cc
 	$(info doing [$@])
-	$(Q)g++ -nostdinc -Wall -Wundef -Wno-trigraphs -fno-strict-aliasing -fno-common -fno-delete-null-pointer-checks -O2 -m32 -msoft-float -mregparm=3 -freg-struct-return -fno-pic -mpreferred-stack-boundary=2 -march=i686 -mtune=generic -maccumulate-outgoing-args -Wa,-mtune=generic32 -ffreestanding -fstack-protector -pipe -fno-asynchronous-unwind-tables -mno-sse -mno-mmx -mno-sse2 -mno-3dnow -mno-avx -fno-omit-frame-pointer -fno-optimize-sibling-calls -fno-strict-overflow -fconserve-stack -fno-exceptions -Werror -c -o $@ $<
+	$(Q)g++ $(KCPP_FLAGS) -c -o $@ $<
 top.o top.mod.o: top.c
 	$(info doing [$@])
 	$(Q)$(MAKE) -C $(KDIR) M=$(CURDIR) V=$(V) modules
