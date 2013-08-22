@@ -17,6 +17,8 @@ KVER?=$(shell uname -r)
 KDIR:=/lib/modules/$(KVER)/build
 # fill in the vervosity level you want
 V?=0
+# do you want to use checkpatch?
+DO_CHECKPATCH:=0
 
 ##############
 # code start #
@@ -40,7 +42,11 @@ C_OBJECTS:=$(addsuffix .o,$(basename $(C_SOURCES)))
 #top-objs:=$(C_OBJECTS)
 
 # this rule was also taken from running with V=1
-$(ko-m): top.o top.mod.o $(CC_OBJECTS) checkpatch
+KO_DEPS:=top.o top.mod.o $(CC_OBJECTS)
+ifeq ($(DO_CHECKPATCH),1)
+	KO_DEPS:=$(KO_DEPS) checkpatch
+endif
+$(ko-m): $(KO_DEPS)
 	$(info doing [$@])
 	$(Q)ld -r -m elf_i386 --build-id -o $(ko-m) $(C_OBJECTS) $(name).mod.o $(CC_OBJECTS)
 # how was this monstrosity created?
@@ -136,6 +142,7 @@ debug:
 	$(info CC_OBJECTS is $(CC_OBJECTS))
 	$(info C_SOURCES is $(C_SOURCES))
 	$(info C_OBJECTS is $(C_OBJECTS))
+	$(info KO_DEPS is $(KO_DEPS))
 .PHONY: checkpatch
 checkpatch:
 	$(info doing [$@])
