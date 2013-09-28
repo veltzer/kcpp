@@ -1,4 +1,0 @@
-Sat Aug 6 13:29:27 IDT 2011
-	revamped the makefile to be silent
-	added debug target to the makefile
-	added $(Q) for silent makefile
