@@ -7,3 +7,4 @@
 modules.order
 Module.symvers
 *.o.cmd
+flags.cfg

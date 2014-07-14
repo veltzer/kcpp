@@ -1,1 +1,1 @@
-- add my own collection of init hooks.
+- get to auto creation of flags.

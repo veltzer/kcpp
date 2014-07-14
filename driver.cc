@@ -4,10 +4,10 @@ class Driver {
 public:
 	int x;
 	Driver() {
-		service_printk("inside constructor!\n");
+		service_puts("inside constructor!\n");
 	}
 	~Driver() {
-		service_printk("inside destructor!\n");
+		service_puts("inside destructor!\n");
 	}
 };
 
@@ -18,16 +18,8 @@ extern "C" {
 	void cpp_exit(void);
 }
 
-void test_kmalloc(void) {
-	void* p = service_malloc(1000);
-	service_free(p);
-}
-
 int cpp_init() {
-	test_kmalloc();
-
 	driver = new Driver();
-
 	return(0);
 }
 

@@ -4,8 +4,8 @@
 /* These are only needed if you dont supply flags
 to the compiler to remove exception handling, run time
 type information and the like... */
-//int __gxx_personality_v0;
-//int _Unwind_Resume;
+int __gxx_personality_v0;
+int _Unwind_Resume;
 //int _GLOBAL_OFFSET_TABLE_;
 
 /* support code for new and delete */

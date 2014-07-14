@@ -16,5 +16,6 @@
 #include "services.h"
 #include "kernel_helper.h"
 
-void service_empty(void) {
+void service_empty(void)
+{
 }

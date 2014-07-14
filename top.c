@@ -1,19 +1,9 @@
 #include <linux/module.h> /* for MODULE_* macros */
-#include <linux/slab.h>	/* for kmalloc */
 #include "connect.h"
-
-void *service_malloc2(unsigned int size)
-{
-	void *p;
-	p = kmalloc(size+1, GFP_KERNEL);
-	return p;
-}
 
 static int __init link_init(void)
 {
-	char *p = kmalloc(1000, GFP_KERNEL);
-	mb();
-	kfree(p);
+	pr_info("in link_init\n");
 	return cpp_init();
 }
 
@@ -21,6 +11,7 @@ static int __init link_init(void)
 static void __exit link_exit(void)
 {
 	cpp_exit();
+	pr_info("in link_exit\n");
 }
 
 module_init(link_init);
