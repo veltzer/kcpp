@@ -39,4 +39,4 @@ They do not have a buffer layer but instead do "extern C" before kernel headers.
 Try to see if this works for a big example.
 They have all kinds of other ideas about constructors for global object and so on.
 	
-	Mark Veltzer <mark.veltzer@gmail.com>, 2011-2013
+	Mark Veltzer <mark.veltzer@gmail.com>, 2011-2014

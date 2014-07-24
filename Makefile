@@ -65,9 +65,9 @@ $(ko-m): $(CC_OBJECTS)
 	$(Q)$(info relinking the module with the C++ parts)
 	$(Q)ld -r -m elf_i386 --build-id -o $(ko-m) $(KO_ING)
 
-$(FLAGS): process_flags.py $(ALL_DEP)
+$(FLAGS): scripts/process_flags.py $(ALL_DEP)
 	$(info doing [$@])
-	$(Q)./process_flags.py $(KDIR) $@
+	$(Q)scripts/process_flags.py $(KDIR) $@
 
 checkpatch.stamp: $(C_SOURCES)
 	$(info doing [$@])
