@@ -63,7 +63,7 @@ $(ko-m): $(CC_OBJECTS)
 	$(info doing [$@])
 	$(Q)$(MAKE) -C $(KDIR) M=$(CURDIR) V=$(V) modules
 	$(Q)$(info relinking the module with the C++ parts)
-	$(Q)ld -r -m elf_i386 --build-id -o $(ko-m) $(KO_ING)
+	$(Q)ld -r --build-id -o $(ko-m) $(KO_ING)
 
 $(FLAGS): scripts/process_flags.py $(ALL_DEP)
 	$(info doing [$@])

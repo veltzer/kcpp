@@ -9,7 +9,7 @@ int _Unwind_Resume;
 //int _GLOBAL_OFFSET_TABLE_;
 
 /* support code for new and delete */
-void *operator new(unsigned int x) {
+void *operator new(unsigned long x) {
 	return(service_malloc(x));
 }
 
