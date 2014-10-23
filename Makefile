@@ -12,11 +12,11 @@ EXTRA_CFLAGS+=-Werror -I.
 # fill in the name of the genrated ko file
 ko-m:=$(name).ko
 # fill in the version of the kernel for which you want the module compiled to
-KVER?=$(shell uname -r)
+KVER:=$(shell uname -r)
 # fill in the directory of the kernel build system
 KDIR:=/lib/modules/$(KVER)/build
 # fill in the vervosity level you want
-V?=0
+V:=0
 # do you want to use checkpatch?
 DO_CHECKPATCH:=1
 # root of a real kernel folder so we could run checkpatch.pl
