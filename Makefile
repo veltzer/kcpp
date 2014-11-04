@@ -71,10 +71,10 @@ $(FLAGS): scripts/process_flags.py $(ALL_DEP)
 
 checkpatch.stamp: $(C_SOURCES)
 	$(info doing [$@])
-	$(Q)scripts/wrapper_silent.py $(KDIR)/scripts/checkpatch.pl --file top.c --root $(KROOT)
-	$(Q)scripts/wrapper_silent.py $(KDIR)/scripts/checkpatch.pl --file ser_empty.c --root $(KROOT)
-	$(Q)scripts/wrapper_silent.py $(KDIR)/scripts/checkpatch.pl --file ser_mem.c --root $(KROOT)
-	$(Q)scripts/wrapper_silent.py $(KDIR)/scripts/checkpatch.pl --file ser_print.c --root $(KROOT)
+	$(Q)wrapper_silent $(KDIR)/scripts/checkpatch.pl --file top.c --root $(KROOT)
+	$(Q)wrapper_silent $(KDIR)/scripts/checkpatch.pl --file ser_empty.c --root $(KROOT)
+	$(Q)wrapper_silent $(KDIR)/scripts/checkpatch.pl --file ser_mem.c --root $(KROOT)
+	$(Q)wrapper_silent $(KDIR)/scripts/checkpatch.pl --file ser_print.c --root $(KROOT)
 	$(Q)touch $@
 
 .PHONY: modules_install
