@@ -94,7 +94,7 @@ help:
 .PHONY: insmod
 insmod:
 	$(info doing [$@])
-	$(Q)sudo insmod $(ko-m) 
+	$(Q)sudo insmod $(ko-m)
 
 .PHONY: lsmod
 lsmod:
