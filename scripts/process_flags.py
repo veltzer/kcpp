@@ -49,6 +49,11 @@ def remove_two_in_a_row(l, s):
 				res.append(x)
 	return res
 
+def remove_if_exists(l, s):
+	if s in l:
+		l.remove(s)
+	return l
+
 def find_ends_with(l, ending):
 	found_count=0
 	for x in l:
@@ -112,12 +117,12 @@ cc1plus: warning: command line option '-Wstrict-prototypes' is valid for C/ObjC 
 cc1plus: warning: command line option '-Wdeclaration-after-statement' is valid for C/ObjC but not for C++ [enabled by default]
 cc1plus: warning: command line option '-Wno-pointer-sign' is valid for C/ObjC but not for C++ [enabled by default]
 '''
-l.remove('-Wstrict-prototypes')
-l.remove('-Wdeclaration-after-statement')
-l.remove('-Wno-pointer-sign')
-l.remove('-Wmissing-prototypes')
-l.remove('-Wold-style-definition')
-#l.remove('-std=gnu90')
-l.remove('-std=gnu89')
+l=remove_if_exists(l, '-Wstrict-prototypes')
+l=remove_if_exists(l, '-Wdeclaration-after-statement')
+l=remove_if_exists(l, '-Wno-pointer-sign')
+l=remove_if_exists(l, '-Wmissing-prototypes')
+l=remove_if_exists(l, '-Wold-style-definition')
+l=remove_if_exists(l, '-std=gnu90')
+l=remove_if_exists(l, '-std=gnu89')
 with open(outfile, 'w') as f:
 	f.write(' '.join(l))
