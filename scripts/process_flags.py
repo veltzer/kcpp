@@ -117,5 +117,7 @@ l.remove('-Wdeclaration-after-statement')
 l.remove('-Wno-pointer-sign')
 l.remove('-Wmissing-prototypes')
 l.remove('-Wold-style-definition')
+#l.remove('-std=gnu90')
+l.remove('-std=gnu89')
 with open(outfile, 'w') as f:
 	f.write(' '.join(l))
