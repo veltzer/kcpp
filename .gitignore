@@ -3,8 +3,11 @@
 *.mod.c
 *.mod.o
 *.o
+*.o.cmd
+
 .tmp_versions/
 modules.order
 Module.symvers
-*.o.cmd
-flags.cfg
+
+/flags.cfg
+/*.stamp

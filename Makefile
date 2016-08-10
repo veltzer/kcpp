@@ -19,8 +19,6 @@ KDIR:=/lib/modules/$(KVER)/build
 V:=0
 # do you want to use checkpatch?
 DO_CHECKPATCH:=1
-# root of a real kernel folder so we could run checkpatch.pl
-KROOT:=~/install/linux-source-3.11.0
 # flags file
 FLAGS:=flags.cfg
 # all targets will depend on this
@@ -71,10 +69,7 @@ $(FLAGS): scripts/process_flags.py $(ALL_DEP)
 
 checkpatch.stamp: $(C_SOURCES)
 	$(info doing [$@])
-	$(Q)wrapper_silent $(KDIR)/scripts/checkpatch.pl --file top.c --root $(KROOT)
-	$(Q)wrapper_silent $(KDIR)/scripts/checkpatch.pl --file ser_empty.c --root $(KROOT)
-	$(Q)wrapper_silent $(KDIR)/scripts/checkpatch.pl --file ser_mem.c --root $(KROOT)
-	$(Q)wrapper_silent $(KDIR)/scripts/checkpatch.pl --file ser_print.c --root $(KROOT)
+	$(Q)$(KDIR)/scripts/checkpatch.pl --file $(C_SOURCES) --no-tree > /dev/null 2> /dev/null
 	$(Q)touch $@
 
 .PHONY: modules_install
