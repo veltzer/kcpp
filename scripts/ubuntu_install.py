@@ -12,9 +12,6 @@ uname=os.uname()[2]
 
 packs=[
 	'linux-headers-{0}'.format(uname),
-
-	# myown
-	'templar',
 ]
 
 args=['sudo','apt-get','install','--assume-yes']
