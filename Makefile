@@ -56,6 +56,7 @@ endif
 
 .PHONY: all
 all: $(ko-m)
+	@true
 
 $(ko-m): $(CC_OBJECTS)
 	$(info doing [$@])
