@@ -11,7 +11,7 @@ import os # for uname
 uname=os.uname()[2]
 
 packs=[
-	'linux-headers-{0}'.format(uname),
+    'linux-headers-{0}'.format(uname),
 ]
 
 args=['sudo','apt-get','install','--assume-yes']

@@ -25,65 +25,65 @@ doClean=True
 # functions #
 #############
 def remove_begin_with(l, s):
-	found=False
-	res=[]
-	for x in l:
-		if x.startswith(s):
-			found=True
-		else:
-			res.append(x)
-	if not found:
-		raise ValueError('could not find stuff begining with', s)
-	return res
+    found=False
+    res=[]
+    for x in l:
+        if x.startswith(s):
+            found=True
+        else:
+            res.append(x)
+    if not found:
+        raise ValueError('could not find stuff begining with', s)
+    return res
 
 def remove_two_in_a_row(l, s):
-	res=[]
-	found=False
-	for x in l:
-		if x==s:
-			found=True
-		else:
-			if found:
-				found=False
-			else:
-				res.append(x)
-	return res
+    res=[]
+    found=False
+    for x in l:
+        if x==s:
+            found=True
+        else:
+            if found:
+                found=False
+            else:
+                res.append(x)
+    return res
 
 def remove_if_exists(l, s):
-	if s in l:
-		l.remove(s)
-	return l
+    if s in l:
+        l.remove(s)
+    return l
 
 def find_ends_with(l, ending):
-	found_count=0
-	for x in l:
-		if x.endswith(ending):
-			found_count+=1
-			found=x
-	if found_count==1:
-		return found
-	raise ValueError('found too many or too little', found_count)
+    found_count=0
+    for x in l:
+        if x.endswith(ending):
+            found_count+=1
+            found=x
+    if found_count==1:
+        return found
+    raise ValueError('found too many or too little', found_count)
 
 ########
 # code #
 ########
 if len(sys.argv)!=3:
-	print('usage: kdir outfile')
-	sys.exit(1)
+    print('usage: kdir outfile')
+    sys.exit(1)
 kdir=sys.argv[1]
 outfile=sys.argv[2]
 
 args=[
-	'/usr/bin/make',
-	'-C','std_module',
-	'V=1',
+    '/usr/bin/make',
+    '-C','std_module',
+    'V=1',
 ]
 if doPassKdir:
-	args.append('KDIR={kdir}'.format(kdir=kdir))
+    args.append('KDIR={kdir}'.format(kdir=kdir))
 if doClean:
-	clean_args=list(args)
-	clean_args.append('clean')
-	output=subprocess.check_output(clean_args)
+    clean_args=list(args)
+    clean_args.append('clean')
+    output=subprocess.check_output(clean_args)
 output=subprocess.check_output(args)
 # split into lines and find the line that ends with 'main.c'
 lines=output.split('\n')
@@ -125,4 +125,4 @@ l=remove_if_exists(l, '-Wold-style-definition')
 l=remove_if_exists(l, '-std=gnu90')
 l=remove_if_exists(l, '-std=gnu89')
 with open(outfile, 'w') as f:
-	f.write(' '.join(l))
+    f.write(' '.join(l))
