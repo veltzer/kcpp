@@ -23,6 +23,8 @@ DO_CHECKPATCH:=1
 FLAGS:=flags.cfg
 # all targets will depend on this
 ALL_DEP:=Makefile
+# do tools?
+DO_TOOLS:=1
 
 ##############
 # code start #
@@ -34,6 +36,10 @@ else # DO_MKDBG
 Q=@
 #.SILENT:
 endif # DO_MKDBG
+
+ifeq ($(DO_TOOLS),1)
+ALL_DEP+=tools.stamp
+endif
 
 SOURCES_ALL:=$(filter-out %.mod.c,$(shell find . -maxdepth 1 -name "*.cc" -or -name "*.c"))
 CC_SOURCES:=$(filter %.cc,$(SOURCES_ALL))
@@ -57,6 +63,11 @@ endif
 .PHONY: all
 all: $(ko-m)
 	@true
+
+tools.stamp: templardefs/deps.py
+	$(info doing [$@])
+	$(Q)templar_cmd install_deps
+	$(Q)make_helper touch-mkdir $@
 
 $(ko-m): $(CC_OBJECTS)
 	$(info doing [$@])

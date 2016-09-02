@@ -11,3 +11,8 @@ Module.symvers
 
 /flags.cfg
 /*.stamp
+
+# python stuff
+__pycache__
+*.pyc
+*.pyo
