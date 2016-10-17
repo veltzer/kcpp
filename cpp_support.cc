@@ -17,3 +17,7 @@ void *operator new(unsigned long x) {
 void operator delete(void *pointer) {
 	service_free(pointer);
 }
+
+void operator delete(void *pointer, const long unsigned int type) {
+	service_free(pointer);
+}
