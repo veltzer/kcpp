@@ -67,7 +67,7 @@ all: $(ko-m)
 tools.stamp: templardefs/deps.py
 	$(info doing [$@])
 	$(Q)templar install_deps
-	$(Q)make_helper touch-mkdir $@
+	$(Q)pymakehelper touch_mkdir $@
 
 $(ko-m): $(CC_OBJECTS)
 	$(info doing [$@])
