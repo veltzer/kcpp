@@ -64,9 +64,8 @@ endif
 all: $(ko-m)
 	@true
 
-tools.stamp: templardefs/deps.py
+tools.stamp: config/deps.py
 	$(info doing [$@])
-	$(Q)templar install_deps
 	$(Q)pymakehelper touch_mkdir $@
 
 $(ko-m): $(CC_OBJECTS)
