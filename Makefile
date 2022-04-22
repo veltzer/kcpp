@@ -1,7 +1,6 @@
 ##############
 # parameters #
 ##############
-
 # fill in the name of the module
 name:=kcpp
 # fill in the object files which are part of the module
@@ -21,10 +20,10 @@ V:=0
 DO_CHECKPATCH:=1
 # flags file
 FLAGS:=flags.cfg
-# all targets will depend on this
-ALL_DEP:=Makefile
 # do tools?
 DO_TOOLS:=1
+# do you want dependency on the Makefile itself ?
+DO_ALLDEP:=1
 
 ##############
 # code start #
@@ -37,8 +36,13 @@ Q=@
 #.SILENT:
 endif # DO_MKDBG
 
+# dependency on the makefile itself
+ifeq ($(DO_ALLDEP),1)
+.EXTRA_PREREQS+=$(foreach mk, ${MAKEFILE_LIST},$(abspath ${mk}))
+endif
+
 ifeq ($(DO_TOOLS),1)
-ALL_DEP+=tools.stamp
+.EXTRA_PREREQS+=tools.stamp
 endif
 
 SOURCES_ALL:=$(filter-out %.mod.c,$(shell find . -maxdepth 1 -name "*.cc" -or -name "*.c"))
@@ -74,7 +78,7 @@ $(ko-m): $(CC_OBJECTS)
 	$(Q)$(info relinking the module with the C++ parts)
 	$(Q)ld -r --build-id -o $(ko-m) $(KO_ING)
 
-$(FLAGS): scripts/process_flags.py $(ALL_DEP)
+$(FLAGS): scripts/process_flags.py
 	$(info doing [$@])
 	$(Q)scripts/process_flags.py $(KDIR) $@
 
