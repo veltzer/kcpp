@@ -105,7 +105,8 @@ l=remove_begin_with(l,'-I')
 # remove macros of the kernel (which we don't use in the cpp layer)
 l=remove_begin_with(l,'-D')
 # remove the -Wp,MD
-l=remove_begin_with(l,'-Wp,-MD')
+# FIXME - this was remarked because the -Wp -MD flags were not found. Is this ok?
+# l=remove_begin_with(l,'-Wp,-MD')
 # remove -include and -isystem (which we don't use in the cpp layer)
 l=remove_two_in_a_row(l, '-isystem')
 l=remove_two_in_a_row(l, '-include')

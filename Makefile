@@ -21,7 +21,7 @@ DO_CHECKPATCH:=1
 # flags file
 FLAGS:=flags.cfg
 # do tools?
-DO_TOOLS:=1
+DO_TOOLS:=0
 # do you want dependency on the Makefile itself ?
 DO_ALLDEP:=1
 
