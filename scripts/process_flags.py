@@ -1,4 +1,4 @@
-#!/usr/bin/python
+#!/usr/bin/python3
 
 '''
 This is a script that processes flags from linux kernel compilation and
@@ -64,6 +64,11 @@ def find_ends_with(l, ending):
         return found
     raise ValueError('found too many or too little', found_count)
 
+def find_first_ends_with(l, ending):
+    for x in l:
+        if x.endswith(ending):
+            return x
+
 ########
 # code #
 ########
@@ -84,10 +89,10 @@ if doClean:
     clean_args=list(args)
     clean_args.append('clean')
     output=subprocess.check_output(clean_args)
-output=subprocess.check_output(args)
+output=subprocess.check_output(args, stderr=subprocess.DEVNULL).decode()
 # split into lines and find the line that ends with 'main.c'
 lines=output.split('\n')
-line=find_ends_with(lines,'main.c')
+line=find_first_ends_with(lines,'main.c')
 line=line.strip()
 l=line.split()
 # remove the last component (which is the source file name, see above)

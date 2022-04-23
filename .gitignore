@@ -1,9 +1,8 @@
-.*.ko.cmd
 *.ko
 *.mod.c
 *.mod.o
 *.o
-*.o.cmd
+*.cmd
 
 .tmp_versions/
 modules.order
