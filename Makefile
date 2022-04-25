@@ -39,11 +39,11 @@ endif # DO_MKDBG
 # dependency on the makefile itself
 ifeq ($(DO_ALLDEP),1)
 .EXTRA_PREREQS+=$(foreach mk, ${MAKEFILE_LIST},$(abspath ${mk}))
-endif
+endif # DO_ALLDEP
 
 ifeq ($(DO_TOOLS),1)
 .EXTRA_PREREQS+=tools.stamp
-endif
+endif # DO_TOOLS
 
 SOURCES_ALL:=$(filter-out %.mod.c,$(shell find . -maxdepth 1 -name "*.cc" -or -name "*.c"))
 CC_SOURCES:=$(filter %.cc,$(SOURCES_ALL))
@@ -57,7 +57,7 @@ KO_ING:=$(C_OBJECTS) $(name).mod.o $(CC_OBJECTS)
 KO_DEPS:=$(ko-m) $(KO_ING)
 ifeq ($(DO_CHECKPATCH),1)
 	KO_DEPS:=$(KO_DEPS) checkpatch.stamp
-endif
+endif # DO_CHECKPATCH
 
 # pattern for compiling the c++ parts
 %.o: %.cc $(FLAGS)
