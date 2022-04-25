@@ -11,7 +11,7 @@ modules.order
 Module.symvers
 
 /flags.cfg
-/*.stamp
+*.stamp
 
 # python stuff
 __pycache__
