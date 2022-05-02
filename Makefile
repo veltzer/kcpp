@@ -20,8 +20,6 @@ V:=0
 DO_CHECKPATCH:=1
 # flags file
 FLAGS:=flags.cfg
-# do tools?
-DO_TOOLS:=0
 # do you want dependency on the Makefile itself ?
 DO_ALLDEP:=1
 
@@ -40,10 +38,6 @@ endif # DO_MKDBG
 ifeq ($(DO_ALLDEP),1)
 .EXTRA_PREREQS+=$(foreach mk, ${MAKEFILE_LIST},$(abspath ${mk}))
 endif # DO_ALLDEP
-
-ifeq ($(DO_TOOLS),1)
-.EXTRA_PREREQS+=tools.stamp
-endif # DO_TOOLS
 
 SOURCES_ALL:=$(filter-out %.mod.c,$(shell find . -maxdepth 1 -name "*.cc" -or -name "*.c"))
 CC_SOURCES:=$(filter %.cc,$(SOURCES_ALL))
