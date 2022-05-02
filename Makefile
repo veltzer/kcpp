@@ -62,10 +62,6 @@ endif # DO_CHECKPATCH
 all: $(ko-m)
 	@true
 
-tools.stamp: config/deps.py
-	$(info doing [$@])
-	$(Q)pymakehelper touch_mkdir $@
-
 $(ko-m): $(CC_OBJECTS)
 	$(info doing [$@])
 	$(Q)$(MAKE) -C $(KDIR) M=$(CURDIR) V=$(V) modules
