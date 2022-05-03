@@ -17,3 +17,4 @@ Module.symvers
 __pycache__
 *.pyc
 *.pyo
+/.pydmt
