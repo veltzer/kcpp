@@ -1,7 +1,3 @@
-import config.project
-
-package_name = config.project.project_name
-
 make_requires = [
     "pymakehelper",
 ]
