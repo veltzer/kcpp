@@ -2,10 +2,8 @@ import config.project
 
 package_name = config.project.project_name
 
-dev_requires = [
+make_requires = [
     "pymakehelper",
-    "pydmt",
-    "pyclassifiers",
 ]
 
 python_requires = ">=3.10"
