@@ -1,19 +1,103 @@
-*.ko
-*.mod.c
-*.mod.o
-*.mod
+# generated
+/build/
+/dist/
+/target/
+/out/
+*.out
+
+# hive
+/derby.log
+/dfs/
+/metastore_db/
+
+# c, c++ stuff
 *.o
-*.cmd
-*.o.d
+*.so
+*.a
+*.dis
+/Makefile.bak
+/bin/
+/obj/
+*.o.ur-safe
+*.oo
+*.elf
+*.s
+*.d
+core.*
+lib*.so.*
+*.gch
+*.pchi
+*.gcda
 
-.tmp_versions/
-modules.order
+# kernel stuff...
+*.ko
+*.mod
+*.mod.c
+*.mod.cmd
+.*.o.cmd
+.*.ko.cmd
+.*.o.tmp
+.tmp_versions
 Module.symvers
-
+modules.order
+*.objdump
+/src/kernel/.*.tmp
+.modules.*.cmd
+.Module.*.cmd
 /flags.cfg
+
+# sphinx
+/docs/_build/
+/docs/.doctrees/environment.pickle
+
+# installations
+/external/
+/install/
+*.tar.gz
+
+# python
+__pycache__/
+*.py[oc]
+/wheel/
+/.venv/
+.coverage
+.coverage.*
+coverage.xml
+*.egg-info/
+
+# mine
+/.pydmt/
 *.stamp
 
-# python stuff
-__pycache__
-*.py[co]
-/.pydmt
+# java
+*.class
+*.jar
+*.war
+*.ear
+*.jsa
+/.mtj.tmp/
+/hs_err_pid*
+
+# node modules
+/node_modules/
+
+# ppt, pdf
+/doc/odp/*.pdf
+/doc/odp/*.ppt
+
+# intel compiler pgo
+*.dyn
+*.dpi
+*.lock
+
+# dwarf dynamic debug info
+*.dwo
+
+# locks by open office
+.~lock.*
+
+# haskell
+*.hi
+
+# repositries of deb packages
+/deb/mypackage/DEBIAN/control
