@@ -86,6 +86,11 @@ clean:
 	$(Q)$(MAKE) -C $(KDIR) M=$(CURDIR) V=$(V) clean
 	$(Q)rm -f checkpatch.stamp $(FLAGS)
 
+.PHONY: clean_hard
+clean_hard:
+	$(info doing [$@])
+	$(Q)git clean -qffxd
+
 .PHONY: help
 help:
 	$(info doing [$@])

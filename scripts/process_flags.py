@@ -1,134 +1,133 @@
-#!/usr/bin/python3
+#!/usr/bin/env python3
 
-'''
+"""
 This is a script that processes flags from linux kernel compilation and
 produces the flags for c++ compilation
-'''
+"""
 
-'''
-General guide to compiler flags (this is true in MOST cases, not in ALL
-cases, check each flag...)
-flags starting with -f or -m: affect code generation
-flags starting with -W: produce more warnings, don't affect code generation
-'''
+import sys
+import subprocess
 
-import subprocess # for check_output
-import sys # for argv, exit
+# General guide to compiler flags (this is true in MOST cases, not in ALL
+# cases, check each flag...)
+# flags starting with -f or -m: affect code generation
+# flags starting with -W: produce more warnings, dont affect code generation
 
-##############
-# parameters #
-##############
-doPassKdir=True
-doClean=True
 
-#############
-# functions #
-#############
-def remove_begin_with(l, s):
+def remove_begin_with(elems, search):
+    """ removed all elemnets from a python list that begin with ... """
     found=False
     res=[]
-    for x in l:
-        if x.startswith(s):
+    for elem in elems:
+        if elem.startswith(search):
             found=True
         else:
-            res.append(x)
-    if not found:
-        raise ValueError('could not find stuff begining with', s)
+            res.append(elem)
+    assert found, f"could not find stuff begining with [{search}]"
     return res
 
-def remove_two_in_a_row(l, s):
+def remove_two_in_a_row(elems, search):
+    """ remove two elements in a row from a list """
     res=[]
     found=False
-    for x in l:
-        if x==s:
+    for elem in elems:
+        if elem==search:
             found=True
         else:
             if found:
                 found=False
             else:
-                res.append(x)
+                res.append(elem)
     return res
 
-def remove_if_exists(l, s):
-    if s in l:
-        l.remove(s)
-    return l
+def remove_if_exists(elems, search):
+    """ remove all elements from a list that contain a substring """
+    if search in elems:
+        elems.remove(search)
+    return elems
 
-def find_ends_with(l, ending):
+def find_ends_with(elems, ending):
+    """ return a single element in a list that has a certain ending """
     found_count=0
-    for x in l:
-        if x.endswith(ending):
+    for elem in elems:
+        if elem.endswith(ending):
             found_count+=1
-            found=x
+            found=elem
     if found_count==1:
         return found
-    raise ValueError('found too many or too little', found_count)
+    # raise ValueError("found too many or too little", found_count)
 
-def find_first_ends_with(l, ending):
-    for x in l:
-        if x.endswith(ending):
-            return x
+def find_first_ends_with(elems, ending):
+    for elem in elems:
+        if elem.endswith(ending):
+            return elem
 
-########
-# code #
-########
-if len(sys.argv)!=3:
-    print('usage: kdir outfile')
-    sys.exit(1)
-kdir=sys.argv[1]
-outfile=sys.argv[2]
+def main():
+    """ main entry point """
+    do_pass_kdir=True
+    do_clean=True
+    if len(sys.argv)!=3:
+        print(f"{sys.argv[0]}: usage: {sys.argv[0]} kdir outfile")
+        sys.exit(1)
+    kdir=sys.argv[1]
+    outfile=sys.argv[2]
 
-args=[
-    '/usr/bin/make',
-    '-C','std_module',
-    'V=1',
-]
-if doPassKdir:
-    args.append('KDIR={kdir}'.format(kdir=kdir))
-if doClean:
-    clean_args=list(args)
-    clean_args.append('clean')
-    output=subprocess.check_output(clean_args)
-output=subprocess.check_output(args, stderr=subprocess.DEVNULL).decode()
-# split into lines and find the line that ends with 'main.c'
-lines=output.split('\n')
-line=find_first_ends_with(lines,'main.c')
-line=line.strip()
-l=line.split()
-# remove the last component (which is the source file name, see above)
-l=l[:-1]
-# header file stuff, does not influence code generation
-#l=remove(l,'-nostdinc')
-# C++ code does not reference any header files of the kernel,
-# operating system, or compiler...
-l=remove_begin_with(l,'-I')
-# remove macros of the kernel (which we don't use in the cpp layer)
-l=remove_begin_with(l,'-D')
-# remove the -Wp,MD
-# FIXME - this was remarked because the -Wp -MD flags were not found. Is this ok?
-# l=remove_begin_with(l,'-Wp,-MD')
-# remove -include and -isystem (which we don't use in the cpp layer)
-l=remove_two_in_a_row(l, '-isystem')
-l=remove_two_in_a_row(l, '-include')
-l=remove_two_in_a_row(l, '-o')
-# if the kernel was compiled with debug and profiling then we don't
-# need it
-l.remove('-pg')
-l.remove('-c')
-l.remove('gcc')
-#l.remove('-g')
-'''
-remove flags which are not valid for C++...
-cc1plus: warning: command line option '-Wstrict-prototypes' is valid for C/ObjC but not for C++ [enabled by default]
-cc1plus: warning: command line option '-Wdeclaration-after-statement' is valid for C/ObjC but not for C++ [enabled by default]
-cc1plus: warning: command line option '-Wno-pointer-sign' is valid for C/ObjC but not for C++ [enabled by default]
-'''
-l=remove_if_exists(l, '-Wstrict-prototypes')
-l=remove_if_exists(l, '-Wdeclaration-after-statement')
-l=remove_if_exists(l, '-Wno-pointer-sign')
-l=remove_if_exists(l, '-Wmissing-prototypes')
-l=remove_if_exists(l, '-Wold-style-definition')
-l=remove_if_exists(l, '-std=gnu90')
-l=remove_if_exists(l, '-std=gnu89')
-with open(outfile, 'w') as f:
-    f.write(' '.join(l))
+    args=[
+        "/usr/bin/make",
+        "-C","std_module",
+        "V=1",
+    ]
+    if do_pass_kdir:
+        args.append(f"KDIR={kdir}")
+    if do_clean:
+        clean_args=list(args)
+        clean_args.append('clean')
+        output=subprocess.check_output(clean_args)
+    output=subprocess.check_output(args, stderr=subprocess.DEVNULL).decode()
+    # split into lines and find the line that ends with 'main.c'
+    lines=output.split('\n')
+    line=find_first_ends_with(lines,'main.c')
+    line=line.strip()
+    flag_list=line.split()
+    # remove the last component (which is the source file name, see above)
+    flag_list=flag_list[:-1]
+    print(flag_list)
+    # header file stuff, does not influence code generation
+    #l=remove(l,'-nostdinc')
+    # C++ code does not reference any header files of the kernel,
+    # operating system, or compiler...
+    # flag_list = remove_begin_with(flag_list,'-I')
+    # remove macros of the kernel (which we dont use in the cpp layer)
+    # flag_list = remove_begin_with(flag_list,'-D')
+    # remove the -Wp,MD
+    # TODO - this was remarked because the -Wp -MD flags were not found. Is this ok?
+    # flag_list=remove_begin_with(flag_list,'-Wp,-MD')
+    # remove -include and -isystem (which we dont use in the cpp layer)
+    flag_list = remove_two_in_a_row(flag_list, '-isystem')
+    flag_list = remove_two_in_a_row(flag_list, '-include')
+    flag_list = remove_two_in_a_row(flag_list, '-o')
+    # if the kernel was compiled with debug and profiling then we dont
+    # need it
+    # flag_list.remove("-pg")
+    flag_list.remove("-c")
+    flag_list.remove("gcc")
+    #l.remove("-g")
+    # remove flags which are not valid for C++...
+    # cc1plus: warning: command line option "-Wstrict-prototypes" is valid for
+    # C/ObjC but not for C++ [enabled by default]
+    # cc1plus: warning: command line option "-Wdeclaration-after-statement" is valid for
+    # C/ObjC but not for C++ [enabled by default]
+    # cc1plus: warning: command line option "-Wno-pointer-sign" is valid for
+    # C/ObjC but not for C++ [enabled by default]
+    flag_list = remove_if_exists(flag_list, "-Wstrict-prototypes")
+    flag_list = remove_if_exists(flag_list, "-Wdeclaration-after-statement")
+    flag_list = remove_if_exists(flag_list, "-Wno-pointer-sign")
+    flag_list = remove_if_exists(flag_list, "-Wmissing-prototypes")
+    flag_list = remove_if_exists(flag_list, "-Wold-style-definition")
+    flag_list = remove_if_exists(flag_list, "-std=gnu90")
+    flag_list = remove_if_exists(flag_list, "-std=gnu89")
+    with open(outfile, "w", encoding="UTF8") as stream:
+        stream.write(" ".join(flag_list))
+
+if __name__ == "__main__":
+    main()
