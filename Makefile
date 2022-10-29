@@ -22,7 +22,7 @@ DO_CHECKPATCH:=1
 FLAGS:=flags.cfg
 # do you want dependency on the Makefile itself ?
 DO_ALLDEP:=1
-# do you want to check python script?
+# do you want to check python scripts?
 DO_PYLINT:=1
 
 ##############
