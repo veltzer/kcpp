@@ -53,14 +53,14 @@ def find_ends_with(elems, ending):
         if elem.endswith(ending):
             found_count+=1
             found=elem
-    if found_count==1:
-        return found
-    # raise ValueError("found too many or too little", found_count)
+    assert found_count==1, f"found too many or too little [{found_count}]"
+    return found
 
 def find_first_ends_with(elems, ending):
     for elem in elems:
         if elem.endswith(ending):
             return elem
+    assert False, "element not found"
 
 def main():
     """ main entry point """

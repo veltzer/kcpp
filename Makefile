@@ -22,6 +22,8 @@ DO_CHECKPATCH:=1
 FLAGS:=flags.cfg
 # do you want dependency on the Makefile itself ?
 DO_ALLDEP:=1
+# do you want to check python script?
+DO_PYLINT:=1
 
 ##############
 # code start #
@@ -39,18 +41,25 @@ ifeq ($(DO_ALLDEP),1)
 .EXTRA_PREREQS+=$(foreach mk, ${MAKEFILE_LIST},$(abspath ${mk}))
 endif # DO_ALLDEP
 
+ALL:=$(ko-m)
+
+ifeq ($(DO_PYLINT),1)
+ALL:=$(ALL) out/pylint.stamp
+endif # DO_PYLINT
+
 SOURCES_ALL:=$(filter-out %.mod.c,$(shell find . -maxdepth 1 -name "*.cc" -or -name "*.c"))
 CC_SOURCES:=$(filter %.cc,$(SOURCES_ALL))
 CC_OBJECTS:=$(addsuffix .o,$(basename $(CC_SOURCES)))
 C_SOURCES:=$(filter %.c,$(SOURCES_ALL))
 C_SOURCES:=$(filter-out ./dummy.c,$(C_SOURCES))
 C_OBJECTS:=$(addsuffix .o,$(basename $(C_SOURCES)))
+ALL_PY:=$(shell find . -type f -not -path "./.venv/*" -name "*.py")
 
 # this rule was also taken from running with V=1
 KO_ING:=$(C_OBJECTS) $(name).mod.o $(CC_OBJECTS)
 KO_DEPS:=$(ko-m) $(KO_ING)
 ifeq ($(DO_CHECKPATCH),1)
-	KO_DEPS:=$(KO_DEPS) checkpatch.stamp
+KO_DEPS:=$(KO_DEPS) checkpatch.stamp
 endif # DO_CHECKPATCH
 
 # pattern for compiling the c++ parts
@@ -59,7 +68,7 @@ endif # DO_CHECKPATCH
 	$(Q)g++ `cat $(FLAGS)` -Wall -Werror -c -o $@ $<
 
 .PHONY: all
-all: $(ko-m)
+all: $(ALL)
 	@true
 
 $(ko-m): $(CC_OBJECTS)
@@ -171,6 +180,14 @@ debug:
 	$(info C_SOURCES is $(C_SOURCES))
 	$(info C_OBJECTS is $(C_OBJECTS))
 	$(info KO_DEPS is $(KO_DEPS))
+	$(info ALL is $(ALL))
+	$(info ALL_PY is $(ALL_PY))
+
+.PHONY: pylint
+pylint: out/pylint.stamp
+out/pylint.stamp: $(ALL_PY)
+	$(Q)pylint --reports=n --score=n $(ALL_PY)
+	$(Q)pymakehelper touch_mkdir $@
 
 .PHONY: test_stress_insmod_rmmod
 test_stress_insmod_rmmod: $(ko-m)
