@@ -123,7 +123,7 @@ def main():
     # need it
     # flag_list.remove("-pg")
     flag_list.remove("-c")
-    #flag_list.remove("gcc")
+    flag_list.remove("gcc-12")
     #l.remove("-g")
     # remove flags which are not valid for C++...
     # cc1plus: warning: command line option "-Wstrict-prototypes" is valid for
