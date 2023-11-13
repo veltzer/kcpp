@@ -106,7 +106,6 @@ def main():
     # remove the last component (which is the source file name, see above)
     flag_list=flag_list[:-1]
     # header file stuff, does not influence code generation
-    flag_list = remove_if_exists(flag_list, "-nostdinc")
     # C++ code does not reference any header files of the kernel,
     # operating system, or compiler...
     flag_list = remove_begin_with(flag_list, "-I")
@@ -123,11 +122,28 @@ def main():
     # need it
     # flag_list.remove("-pg")
     flag_list.remove("-c")
-    if "gcc-12" in flag_list:
-        flag_list.remove("gcc-12")
-    if "gcc" in flag_list:
-        flag_list.remove("gcc")
-    #l.remove("-g")
+    remove_flags = {
+        "-nostdinc", # header file stuff, does not influence code generation
+        "gcc-13",
+        "gcc-12",
+        "gcc-11",
+        "gcc",
+        "-Werror=strict-prototypes",
+        "-Werror=implicit-function-declaration",
+        "-Werror=implicit-int",
+        "-Werror=designated-init",
+        "-Werror=incompatible-pointer-types",
+        "-Wdeclaration-after-statement",
+        "-Wno-pointer-sign",
+        "-Wmissing-prototypes",
+        "-Wold-style-definition",
+        "-std=gnu90",
+        "-std=gnu89",
+        "-std=gnu11",
+    }
+    for remove_flag in remove_flags:
+        remove_if_exists(flag_list, remove_flag)
+    # l.remove("-g")
     # remove flags which are not valid for C++...
     # cc1plus: warning: command line option "-Wstrict-prototypes" is valid for
     # C/ObjC but not for C++ [enabled by default]
@@ -135,18 +151,6 @@ def main():
     # C/ObjC but not for C++ [enabled by default]
     # cc1plus: warning: command line option "-Wno-pointer-sign" is valid for
     # C/ObjC but not for C++ [enabled by default]
-    flag_list = remove_if_exists(flag_list, "-Werror=strict-prototypes")
-    flag_list = remove_if_exists(flag_list, "-Werror=implicit-function-declaration")
-    flag_list = remove_if_exists(flag_list, "-Werror=implicit-int")
-    flag_list = remove_if_exists(flag_list, "-Werror=designated-init")
-    flag_list = remove_if_exists(flag_list, "-Werror=incompatible-pointer-types")
-    flag_list = remove_if_exists(flag_list, "-Wdeclaration-after-statement")
-    flag_list = remove_if_exists(flag_list, "-Wno-pointer-sign")
-    flag_list = remove_if_exists(flag_list, "-Wmissing-prototypes")
-    flag_list = remove_if_exists(flag_list, "-Wold-style-definition")
-    flag_list = remove_if_exists(flag_list, "-std=gnu90")
-    flag_list = remove_if_exists(flag_list, "-std=gnu89")
-    flag_list = remove_if_exists(flag_list, "-std=gnu11")
     with open(outfile, "w", encoding="UTF8") as stream:
         stream.write(" ".join(flag_list))
 
