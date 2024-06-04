@@ -49,6 +49,7 @@ def remove_if_exists(elems, search):
 
 def find_ends_with(elems, ending):
     """ return a single element in a list that has a certain ending """
+    found = None
     found_count=0
     for elem in elems:
         if elem.endswith(ending):
