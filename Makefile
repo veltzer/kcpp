@@ -36,11 +36,6 @@ Q=@
 #.SILENT:
 endif # DO_MKDBG
 
-# dependency on the makefile itself
-ifeq ($(DO_ALLDEP),1)
-.EXTRA_PREREQS+=$(foreach mk, ${MAKEFILE_LIST},$(abspath ${mk}))
-endif # DO_ALLDEP
-
 ALL:=$(ko-m)
 
 ifeq ($(DO_PYLINT),1)
@@ -194,3 +189,10 @@ test_stress_insmod_rmmod: $(ko-m)
 	$(info doing [$@])
 	-sudo rmmod $(name)
 	./scripts/test_stress_insmod_rmmod.pl $(ko-m) 1000
+
+##########
+# alldep #
+##########
+ifeq ($(DO_ALLDEP),1)
+.EXTRA_PREREQS+=$(foreach mk, ${MAKEFILE_LIST},$(abspath ${mk}))
+endif # DO_ALLDEP
