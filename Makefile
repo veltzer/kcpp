@@ -42,7 +42,7 @@ ifeq ($(DO_PYLINT),1)
 ALL:=$(ALL) out/pylint.stamp
 endif # DO_PYLINT
 
-SOURCES_ALL:=$(filter-out %.mod.c,$(shell find . -maxdepth 1 -name "*.cc" -or -name "*.c"))
+SOURCES_ALL:=$(filter-out %.mod.c,$(shell find . -maxdepth 1 -and -type f -name "*.cc" -or -name "*.c"))
 CC_SOURCES:=$(filter %.cc,$(SOURCES_ALL))
 CC_OBJECTS:=$(addsuffix .o,$(basename $(CC_SOURCES)))
 C_SOURCES:=$(filter %.c,$(SOURCES_ALL))
