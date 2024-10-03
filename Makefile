@@ -25,9 +25,9 @@ DO_ALLDEP:=1
 # do you want to check python scripts?
 DO_PYLINT:=1
 
-##############
-# code start #
-##############
+########
+# code #
+########
 ifeq ($(V),1)
 Q=
 # we are not silent in this branch
