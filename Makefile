@@ -24,6 +24,9 @@ FLAGS:=flags.cfg
 DO_ALLDEP:=1
 # do you want to check python scripts?
 DO_PYLINT:=1
+# cross compilation in ubuntu
+ARCH:=x86_64
+CROSS_COMPILE:=x86_64-linux-gnu-
 
 ########
 # code #
@@ -68,7 +71,7 @@ all: $(ALL)
 
 $(ko-m): $(CC_OBJECTS)
 	$(info doing [$@])
-	$(Q)$(MAKE) -C $(KDIR) M=$(CURDIR) V=$(V) modules
+	$(Q)$(MAKE) -C $(KDIR) M=$(CURDIR) ARCH=$(ARCH) CROSS_COMPILE=$(CROSS_COMPILE) V=$(V) modules
 	$(Q)$(info relinking the module with the C++ parts)
 	$(Q)ld -r --build-id -o $(ko-m) $(KO_ING)
 
@@ -83,11 +86,11 @@ checkpatch.stamp: $(C_SOURCES)
 
 .PHONY: modules_install
 modules_install:
-	$(Q)$(MAKE) -C $(KDIR) M=$(CURDIR) V=$(V) modules_install
+	$(Q)$(MAKE) -C $(KDIR) M=$(CURDIR) ARCH=$(ARCH) CROSS_COMPILE=$(CROSS_COMPILE) V=$(V) modules_install
 
 .PHONY: clean
 clean:
-	$(Q)$(MAKE) -C $(KDIR) M=$(CURDIR) V=$(V) clean
+	$(Q)$(MAKE) -C $(KDIR) M=$(CURDIR) ARCH=$(ARCH) CROSS_COMPILE=$(CROSS_COMPILE) V=$(V) clean
 	$(Q)rm -f checkpatch.stamp $(FLAGS)
 
 .PHONY: clean_hard

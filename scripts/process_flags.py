@@ -93,7 +93,8 @@ def main():
         clean_args=list(args)
         clean_args.append("clean")
         output=subprocess.check_output(clean_args)
-    output=subprocess.check_output(args, stderr=subprocess.DEVNULL).decode()
+    # output=subprocess.check_output(args, stderr=subprocess.DEVNULL).decode()
+    output=subprocess.check_output(args).decode()
     # split into lines and find the line that ends with "main.c"
     lines=output.split("\n")
     # old code
