@@ -126,6 +126,7 @@ def main():
     flag_list.remove("-c")
     remove_flags = {
         "-nostdinc", # header file stuff, does not influence code generation
+        "gcc-14",
         "gcc-13",
         "gcc-12",
         "gcc-11",
