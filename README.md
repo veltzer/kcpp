@@ -49,4 +49,4 @@ Try to see if this works for a big example.
 They have all kinds of other ideas about constructors for global object and so on.
 * http://www.drdobbs.com/cpp/c-exceptions-the-linux-kernel/229100146
 
-Mark Veltzer, Copyright © 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023, 2024
+Mark Veltzer, Copyright © 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023, 2024, 2025
