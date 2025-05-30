@@ -72,6 +72,7 @@ all: $(ALL)
 $(ko-m): $(CC_OBJECTS)
 	$(info doing [$@])
 	$(Q)$(MAKE) -C $(KDIR) M=$(CURDIR) ARCH=$(ARCH) CROSS_COMPILE=$(CROSS_COMPILE) V=$(V) modules
+	$(Q)rm -f kcpp.mod
 	$(Q)$(info relinking the module with the C++ parts)
 	$(Q)ld -r --build-id -o $(ko-m) $(KO_ING)
 
