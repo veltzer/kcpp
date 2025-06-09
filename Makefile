@@ -75,6 +75,7 @@ $(ko-m): $(CC_OBJECTS)
 	$(Q)rm -f kcpp.mod
 	$(Q)$(info relinking the module with the C++ parts)
 	$(Q)ld -r --build-id -o $(ko-m) $(KO_ING)
+	$(Q)rm -f kcpp.mod
 
 $(FLAGS): scripts/process_flags.py
 	$(info doing [$@])
