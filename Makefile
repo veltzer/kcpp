@@ -84,7 +84,7 @@ $(FLAGS): scripts/process_flags.py
 checkpatch.stamp: $(C_SOURCES)
 	$(info doing [$@])
 	$(Q)$(KDIR)/scripts/checkpatch.pl --file $(C_SOURCES) --no-tree > /dev/null 2> /dev/null
-	$(Q)touch $@
+	$(Q)pymakehelper touch_mkdir $@
 
 .PHONY: modules_install
 modules_install:
