@@ -1,5 +1,4 @@
 # THIS IS AN AUTO-GENERATED FILE. DO NOT EDIT!
-pymakehelper
 pydmt
-pyclassifiers
 pylint
+pymakehelper
