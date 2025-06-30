@@ -1,5 +1,8 @@
 # THIS IS AN AUTO-GENERATED FILE. DO NOT EDIT!
-pyclassifiers
+mypy
+pycmdtools
 pydmt
 pylint
 pymakehelper
+pytest
+ruff
