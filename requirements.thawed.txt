@@ -1,9 +1,0 @@
-# THIS IS AN AUTO-GENERATED FILE. DO NOT EDIT!
-mypy
-pyclassifiers
-pycmdtools
-pydmt
-pylint
-pymakehelper
-pytest
-ruff

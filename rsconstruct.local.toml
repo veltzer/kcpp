@@ -1,0 +1,6 @@
+# Repo-specific overlay. Deep-merged over the canonical rsconstruct.toml.
+
+# README.md renders from tera.templates/README.md.tera, loading config/*.lua
+# with load_lua (the pyanyzip pattern). The pydmt mako templates are gone.
+[processor.tera]
+src_dirs = ["tera.templates"]
