@@ -5,9 +5,9 @@ This is a script that processes flags from linux kernel compilation and
 produces the flags for c++ compilation
 """
 
-import sys
-import subprocess
 import re
+import subprocess
+import sys
 
 # General guide to compiler flags (this is true in MOST cases, not in ALL
 # cases, check each flag...)

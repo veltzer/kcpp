@@ -5,8 +5,9 @@ this is a stress testing script which runs many insmod/rmmod combinations
 to check that there are no problems in loading/unloading the driver...
 """
 
-import sys
 import os
+import sys
+
 
 def main():
     """ main entry point """
