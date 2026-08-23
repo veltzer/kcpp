@@ -1,15 +1,22 @@
-## kcpp
-
-version: 0.0.1
+# *kcpp* project by Mark Veltzer
 
 description: C++ framework for the linux kernel
 
-website: https://veltzer.github.io/kcpp
+project website: https://veltzer.github.io/kcpp
 
-## Build
+author: Mark Veltzer
+
+version: 0.0.1
+
+![Code style: black](https://img.shields.io/badge/code%20style-black-000000.svg)
+
+## github
+
+![License](https://img.shields.io/github/license/veltzer/kcpp)
+
+## build
 
 ![build](https://github.com/veltzer/kcpp/workflows/build/badge.svg)
-
 POC for writing C++ modules for the Linux kernel
 ================================================
 
@@ -48,8 +55,11 @@ Try to see if this works for a big example.
 They have all kinds of other ideas about constructors for global object and so on.
 * http://www.drdobbs.com/cpp/c-exceptions-the-linux-kernel/229100146
 
-## Contact
+## contact me
 
-chat with me at [![gitter](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/veltzer/mark.veltzer)
+[mailto](mailto:mark.veltzer@gmail.com)
+![gitter](https://img.shields.io/gitter/room/veltzer/mark.veltzer)
+![discord](https://img.shields.io/discord/719336281624281119)
+![discord](https://img.shields.io/discord/719336282194444302)
 
 Mark Veltzer, Copyright © 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023, 2024, 2025, 2026
