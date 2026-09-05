@@ -1,8 +1,8 @@
-# *kcpp* project by Mark Veltzer
+# *c-kcpp* project by Mark Veltzer
 
 description: C++ framework for the linux kernel
 
-project website: https://veltzer.github.io/kcpp
+project website: https://veltzer.github.io/c-kcpp
 
 author: Mark Veltzer
 
@@ -12,11 +12,11 @@ version: 0.0.1
 
 ## github
 
-![License](https://img.shields.io/github/license/veltzer/kcpp)
+![License](https://img.shields.io/github/license/veltzer/c-kcpp)
 
 ## build
 
-![build](https://github.com/veltzer/kcpp/workflows/build/badge.svg)
+![build](https://github.com/veltzer/c-kcpp/workflows/build/badge.svg)
 POC for writing C++ modules for the Linux kernel
 ================================================
 
