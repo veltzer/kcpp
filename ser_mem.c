@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: GPL-2.0
 #include <linux/kernel.h>
 #include <linux/module.h>
 #include <linux/pci.h>
@@ -79,12 +80,12 @@ void *service_malloc(unsigned int size)
 	malloc_num++;
 #endif /* DO_MEMDBG */
 	/*
-	* if (size == 0) {
-	*	DEBUG("kmalloc size=0");
-	*	BUG();
-	* }
-	* p = kmalloc(size, GFP_KERNEL);
-	*/
+	 * if (size == 0) {
+	 *	DEBUG("kmalloc size=0");
+	 *	BUG();
+	 * }
+	 * p = kmalloc(size, GFP_KERNEL);
+	 */
 	p = kmalloc(size, GFP_KERNEL);
 	DEBUG("kmalloc size=%d pointer=%p", size, p);
 	if (p == NULL)

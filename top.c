@@ -1,9 +1,10 @@
+// SPDX-License-Identifier: GPL-2.0
 #include <linux/module.h> /* for MODULE_* macros */
 #include "connect.h"
 
 static int __init link_init(void)
 {
-	pr_info("in link_init\n");
+	pr_info("kcpp: loading\n");
 	return cpp_init();
 }
 
@@ -11,7 +12,7 @@ static int __init link_init(void)
 static void __exit link_exit(void)
 {
 	cpp_exit();
-	pr_info("in link_exit\n");
+	pr_info("kcpp: unloading\n");
 }
 
 module_init(link_init);

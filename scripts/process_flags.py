@@ -5,6 +5,7 @@ This is a script that processes flags from linux kernel compilation and
 produces the flags for c++ compilation
 """
 
+import os
 import re
 import subprocess
 import sys
@@ -82,19 +83,19 @@ def main():
     kdir=sys.argv[1]
     outfile=sys.argv[2]
 
+    # build the sample module in std_module/ (described by its Kbuild file)
+    # verbosely, so the kernel prints the exact gcc command line it uses
+    std_module=os.path.join(os.getcwd(), "std_module")
     args=[
-        "/usr/bin/make",
-        "-C", "std_module",
+        "make",
+        "-C", kdir if do_pass_kdir else f"/lib/modules/{os.uname().release}/build",
+        f"M={std_module}",
         "V=1",
+        "W=1",
     ]
-    if do_pass_kdir:
-        args.append(f"KDIR={kdir}")
     if do_clean:
-        clean_args=list(args)
-        clean_args.append("clean")
-        output=subprocess.check_output(clean_args)
-    # output=subprocess.check_output(args, stderr=subprocess.DEVNULL).decode()
-    output=subprocess.check_output(args).decode()
+        subprocess.check_output(args+["clean"])
+    output=subprocess.check_output(args+["modules"]).decode()
     # split into lines and find the line that ends with "main.c"
     lines=output.split("\n")
     # old code
